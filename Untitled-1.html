@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    ul{
+      width: 300px;
+      display: flex;
+      justify-content: center;
+      list-style: none;
+    }
+    ul li{
+      height: 40px;
+      border: 1px solid #ccc;
+      flex-grow: 1;
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="calculator">
+    <ul>
+      <li id="view" style="text-align: right;padding-right:20px;">0</li>
+    </ul>
+    <ul>
+      <li w_type="comp">清空</li>
+      <li w_type="comp">退格</li>
+      <li w_type="comp"></li>
+      <li w_type="comp">/</li>
+    </ul>
+    <ul>
+      <li w_type="number">7</li>
+      <li w_type="number">8</li>
+      <li w_type="number">9</li>
+      <li w_type="comp">*</li>
+    </ul>
+    <ul>
+      <li w_type="number">4</li>
+      <li w_type="number">5</li>
+      <li w_type="number">6</li>
+      <li w_type="comp">-</li>
+    </ul>
+    <ul>
+      <li w_type="number">1</li>
+      <li w_type="number">2</li>
+      <li w_type="number">3</li>
+      <li w_type="comp">+</li>
+    </ul>
+    <ul>
+      <li></li>
+      <li w_type="number">0</li>
+      <li w_type="number">.</li>
+      <li w_type="comp">=</li>
+    </ul>
+  </div>
+  <script>
+    class Calculator{
+      constructor(el){
+        this.el = el
+        this.catchValue1 = ''
+        this.catchValue2 = ''
+        this.catchCalculation = ''
+        this.viewText='0'
+        this.el.addEventListener('click',this.handleClick.bind(this))
+      }
+      handleClick(e){
+        if(e.target.attributes.w_type.value=='number'){
+          let value = e.target.innerText
+          this.numberClick(value)
+        }else if(e.target.attributes.w_type.value=='comp'){
+          let value = e.target.innerText
+          this.compClick(value)
+        }
+      }
+      numberClick(value){
+        if(this.catchCalculation==''){
+          this.catchValue1+=value
+          this.viewText = this.catchValue1
+        }else{
+          this.catchValue2+=value
+          this.viewText = this.catchValue2
+        }
+        this.render()
+      }
+
+      compClick(value){
+        if(value == '清空'){
+        }else if(value=='退格'){
+        }
+
+        switch (value) {
+          case '清空':
+            this.clean()
+            break;
+          case '退格':
+            this.backSpace()
+            break;
+          case '+':
+            this.plus()
+            break;
+          case '-':
+            this.subtract()
+            break;
+          case '*':
+            this.ride()
+            break;
+          case '/':
+            this.except()
+            break;
+          case '=':
+            this.equal()
+            break;
+        
+          default:
+            break;
+        }
+      }
+      clean(){
+        this.catchValue1 = ''
+        this.catchValue2 = ''
+        this.viewText = '0'
+        this.render()
+      }
+      backSpace(){
+        if(this.catchValue2){
+          this.catchValue2 = this.catchValue2.slice(0,this.catchValue2.length-1)
+          this.viewText = this.catchValue2||'0'
+        }else{
+          this.catchValue1 = this.catchValue1.slice(0,this.catchValue1.length-1)
+          this.viewText = this.catchValue1||'0'
+        }
+        this.render()
+      }
+
+      plus(){
+        this.equal()
+        this.catchCalculation = '+'
+      }
+      subtract(){
+        this.equal()
+        this.catchCalculation = '-'
+      }
+      ride(){
+        this.equal()
+        this.catchCalculation = '*'
+      }
+      except(){
+        this.equal()
+        this.catchCalculation = '/'
+      }
+      equal(){
+        if(this.catchCalculation&&this.catchValue2){
+          switch (this.catchCalculation) {
+            case '+':
+              this.catchValue1 = Number(this.catchValue1) + Number(this.catchValue2)
+              break;
+            case '-':
+              this.catchValue1 = Number(this.catchValue1) - Number(this.catchValue2)
+              break;
+            case '*':
+              this.catchValue1 = Number(this.catchValue1) * Number(this.catchValue2)
+              break;
+            case '/':
+              this.catchValue1 = Number(this.catchValue1) / Number(this.catchValue2)
+              break;
+          
+            default:
+              break;
+          }
+          this.catchValue1 =  this.catchValue1.toString()
+          this.catchValue2 = ''
+          this.catchCalculation = ''
+          this.viewText = this.catchValue1
+          this.render()
+        }
+      }
+      render(){
+        document.querySelector('#view').innerText = this.viewText
+      }
+    }
+    new Calculator(document.querySelector('#calculator'))
+
+  </script>
+</body>
+</html>
