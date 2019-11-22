@@ -182,7 +182,7 @@
         }
       }
       render(){
-        document.querySelector('#view').innerText = this.viewText
+        this.el.querySelector('#view').innerText = this.viewText
       }
     }
     new Calculator(document.querySelector('#calculator'))
